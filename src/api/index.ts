@@ -14,5 +14,8 @@ class Api {
   async removeOrder(id: number): Promise<Order | string> {
     return (await axios.post(`orders/delete/${id}`)).data;
   }
+  async createOrder(value: Order): Promise<Order> {
+    return (await axios.post("orders/add", value)).data;
+  }
 }
 export default new Api();

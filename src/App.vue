@@ -13,8 +13,8 @@
         @remove="removeOrderById(order.id)"
       />
     </div>
-    <BaseModal v-if="orderModal" @close="toggleOrderModal">
-      dfdf
+    <BaseModal v-if="orderModal" title="Создание Заказа" @close="toggleOrderModal">
+      <CreateOrder @submit="createProduct" />
     </BaseModal>
     <el-button class="create-button" type="primary" @click="toggleOrderModal">Добавить Заказ</el-button>
   </div>
@@ -30,11 +30,13 @@
   import { Order } from "@/dto/api";
   // Components
   import OrderCard from "@/components/OrderCard.vue";
+  import CreateOrder from "@/components/CreateOrder.vue";
   import BaseModal from "@/components/UI-Kit/BaseModal.vue";
 
   @Component({
     components: {
       OrderCard,
+      CreateOrder,
       BaseModal,
     },
   })
@@ -45,6 +47,12 @@
       await StatusService.init();
       await ProductService.init();
       this.orders = await OrderService.getAllOrders();
+    }
+    createProduct(value: Order) {
+      OrderService.createOrder(value).then((res) => {
+        this.toggleOrderModal();
+        this.orders.push(res);
+      });
     }
     toggleOrderModal() {
       this.orderModal = !this.orderModal;

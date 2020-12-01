@@ -9,5 +9,8 @@ class OrderService {
   removeOrderById(id: number): Promise<Order | string> {
     return Api.removeOrder(id);
   }
+  createOrder(value: Order): Promise<Order> {
+    return Api.createOrder(value);
+  }
 }
 export default new OrderService();
