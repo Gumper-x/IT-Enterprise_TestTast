@@ -120,7 +120,7 @@
       margin-right: 10px;
     }
     &__edit {
-      grid-area: edit;
+      margin-right: 6px;
     }
     &__remove {
       grid-area: remove;

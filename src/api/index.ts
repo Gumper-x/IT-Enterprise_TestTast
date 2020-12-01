@@ -11,5 +11,8 @@ class Api {
   async getAllOrders(): Promise<Order[]> {
     return (await axios.get("orders")).data;
   }
+  async removeOrder(id: number): Promise<Order | string> {
+    return (await axios.post(`orders/delete/${id}`)).data;
+  }
 }
 export default new Api();

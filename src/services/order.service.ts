@@ -4,10 +4,10 @@ import { Order } from "@/dto/api";
 
 class OrderService {
   async getAllOrders() {
-    // const ArrayOrder = await Api.getAllOrders();
-    // const ArrayOrderSliced = ArrayOrder.slice(0, 4);
-    // console.log(ArrayOrderSliced);
     return await Api.getAllOrders();
+  }
+  removeOrderById(id: number): Promise<Order | string> {
+    return Api.removeOrder(id);
   }
 }
 export default new OrderService();

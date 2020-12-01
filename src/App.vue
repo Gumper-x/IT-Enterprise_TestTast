@@ -13,6 +13,10 @@
         @remove="removeOrderById(order.id)"
       />
     </div>
+    <BaseModal v-if="orderModal" @close="toggleOrderModal">
+      dfdf
+    </BaseModal>
+    <el-button class="create-button" type="primary" @click="toggleOrderModal">Добавить Заказ</el-button>
   </div>
 </template>
 
@@ -24,20 +28,26 @@
   import OrderService from "@/services/order.service";
   // Dto
   import { Order } from "@/dto/api";
-  // @Components
+  // Components
   import OrderCard from "@/components/OrderCard.vue";
+  import BaseModal from "@/components/UI-Kit/BaseModal.vue";
 
   @Component({
     components: {
       OrderCard,
+      BaseModal,
     },
   })
   export default class App extends Vue {
     private orders: Order[] = [];
+    private orderModal = false;
     async mounted() {
       await StatusService.init();
       await ProductService.init();
       this.orders = await OrderService.getAllOrders();
+    }
+    toggleOrderModal() {
+      this.orderModal = !this.orderModal;
     }
     handleStatusId(id: number) {
       return StatusService.getStatusById(id);
@@ -51,10 +61,11 @@
     handleProductPrice(id: number) {
       return ProductService.getProductById(id).price;
     }
-    removeOrderById(id: number) {
-      console.log(id);
-
-      return ProductService.getProductById(id).price;
+    async removeOrderById(id: number) {
+      await OrderService.removeOrderById(id);
+      this.orders = this.orders.filter((item) => {
+        return item.id !== id;
+      });
     }
   }
 </script>
@@ -69,5 +80,10 @@
     max-width: 700px;
     margin: 0 auto;
     margin-top: 1rem;
+  }
+  .create-button {
+    position: fixed;
+    right: 2.5vh;
+    bottom: 2vh;
   }
 </style>
