@@ -28,7 +28,7 @@
 }
 
 body {
-  font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
   font-weight: normal;
   text-rendering: optimizeLegibility;
   text-size-adjust: 100%;
@@ -54,4 +54,9 @@ a {
 ul,
 li {
   list-style-type: none;
+}
+
+.el-popconfirm__main {
+  margin-top: 0.3rem;
+  margin-bottom: 0.5rem;
 }

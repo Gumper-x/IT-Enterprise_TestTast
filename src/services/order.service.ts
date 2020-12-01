@@ -1,9 +1,13 @@
-import axios from "axios";
-import { Product } from "./order";
+import Api from "@/api/";
+// Dto
+import { Order } from "@/dto/api";
 
 class OrderService {
-  getAllProducts(): Promise<Product[]> {
-    return axios.get("products");
+  async getAllOrders() {
+    // const ArrayOrder = await Api.getAllOrders();
+    // const ArrayOrderSliced = ArrayOrder.slice(0, 4);
+    // console.log(ArrayOrderSliced);
+    return await Api.getAllOrders();
   }
 }
 export default new OrderService();

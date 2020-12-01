@@ -1,35 +1,70 @@
 <template>
   <div class="order-card" shadow="hover">
-    <img
-      class="order-card__img"
-      src="https://www.apple.com/v/iphone/compare/n/images/overview/all_models_iphone11_pro__ejujupnldouq_large.jpg"
-      alt="Product-preview"
-    />
-    <div class="order-card__title">iPhone 11 Pro Max</div>
-    <el-tag class="order-card__status" type="success">Потверждён</el-tag>
+    <img class="order-card__img" :src="img" alt="Product-preview" />
+    <div class="order-card__title">{{ title }}</div>
+    <el-tag class="order-card__status" :type="getStatusType">{{ status }}</el-tag>
     <ul class="order-card__spec">
       <li>
         Цена:
-        <span>200</span>
+        <span>${{ price }}</span>
       </li>
       <li>
         Количевство:
-        <span>5 шт.</span>
+        <span>{{ count }} шт.</span>
       </li>
       <li>
         Сумма:
-        <span>$1500</span>
+        <span>${{ getTatalPrice }}</span>
       </li>
     </ul>
     <div class="order-card__operation">
-      <el-button class="order-card__edit" size="small">Изменить</el-button>
-      <el-button class="order-card__remove" type="danger" size="small">Удалить</el-button>
+      <el-button class="order-card__edit" size="small" type="info" plain icon="el-icon-edit">Изменить</el-button>
+      <el-popconfirm
+        confirm-button-text="Да"
+        cancel-button-text="Нет"
+        icon="el-icon-delete"
+        icon-color="red"
+        title="Подтвердите удаление заказа"
+        @confirm="$emit('remove')"
+      >
+        <el-button class="order-card__remove" type="danger" slot="reference" size="small">Удалить</el-button>
+      </el-popconfirm>
     </div>
   </div>
 </template>
 
-<script>
-  export default {};
+<script lang="ts">
+  import { Component, Prop, Vue } from "vue-property-decorator";
+
+  @Component
+  export default class OrderCard extends Vue {
+    @Prop({ default: "Отсутствует" }) readonly title!: string;
+    @Prop({ default: 0 }) readonly price!: number;
+    @Prop({ default: 0 }) readonly count!: number;
+    @Prop({ default: "Неизвестно" }) readonly status!: string;
+    @Prop({ default: "" }) readonly img!: string;
+    get getTatalPrice(): number {
+      return this.price * this.count;
+    }
+    get getStatusType(): string {
+      switch (this.status) {
+        case "Новый":
+          return "danger";
+        case "Подтвержден":
+          return "warning";
+        case "Отгрузка":
+          return "warning";
+        case "Обработка":
+          return "primary";
+        case "Доставка":
+          return "success";
+        case "Выполнен":
+          return "success";
+        default:
+          return "info";
+      }
+    }
+  }
 </script>
 
 <style lang="scss" scoped>
@@ -54,7 +89,7 @@
     &__img {
       grid-area: img;
       width: 100%;
-      max-width: 140px;
+      max-width: 135px;
     }
     &__title {
       grid-area: title;

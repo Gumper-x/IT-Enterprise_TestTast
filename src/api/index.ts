@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Product, Status, Order } from "./dto";
+import { Product, Status, Order } from "@/dto/api";
 
 class Api {
   async getAllProducts(): Promise<Product[]> {
