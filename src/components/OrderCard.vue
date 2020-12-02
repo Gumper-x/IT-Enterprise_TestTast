@@ -1,5 +1,5 @@
 <template>
-  <div class="order-card" shadow="hover">
+  <div class="order-card">
     <img class="order-card__img" :src="img" alt="Product-preview" />
     <div class="order-card__title">{{ title }}</div>
     <el-tag class="order-card__status" :type="getStatusType">{{ status }}</el-tag>
@@ -18,7 +18,7 @@
       </li>
     </ul>
     <div class="order-card__operation">
-      <el-button class="order-card__edit" size="small" type="info" plain icon="el-icon-edit">Изменить</el-button>
+      <el-button class="order-card__edit" size="small" type="info" plain icon="el-icon-edit" @click="toggleEditeble">Изменить</el-button>
       <el-popconfirm
         confirm-button-text="Да"
         cancel-button-text="Нет"
@@ -43,6 +43,7 @@
     @Prop({ default: 0 }) readonly count!: number;
     @Prop({ default: "Неизвестно" }) readonly status!: string;
     @Prop({ default: "" }) readonly img!: string;
+    private edit = false;
     get getTatalPrice(): number {
       return this.price * this.count;
     }
@@ -63,6 +64,9 @@
         default:
           return "info";
       }
+    }
+    toggleEditeble() {
+      this.edit = !this.edit;
     }
   }
 </script>

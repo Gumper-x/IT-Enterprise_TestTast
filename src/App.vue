@@ -1,14 +1,14 @@
 <template>
   <div id="app">
     <img width="120" src="https://icon-library.com/images/order-icon/order-icon-28.jpg" />
-    <div class="grid" @click="handleStatusId">
+    <div class="grid">
       <OrderCard
         v-for="order in orders"
-        :img="handleProductImg(order.productId)"
-        :title="handleProductTitle(order.productId)"
-        :price="handleProductPrice(order.productId)"
+        :img="handleProduct(order.productId).photoUrl"
+        :title="handleProduct(order.productId).name"
+        :price="handleProduct(order.productId).price"
         :count="order.count"
-        :status="handleStatusId(order.statusId)"
+        :status="handleStatus(order.statusId)"
         :key="order.id"
         @remove="removeOrderById(order.id)"
       />
@@ -22,9 +22,10 @@
 
 <script lang="ts">
   import { Component, Vue } from "vue-property-decorator";
+  // Vuex
+  import ProductModule from "@/store/modules/product";
+  import StatusModule from "@/store/modules/status";
   // Services
-  import StatusService from "@/services/status.service";
-  import ProductService from "@/services/product.service";
   import OrderService from "@/services/order.service";
   // Dto
   import { Order } from "@/dto/api";
@@ -44,36 +45,37 @@
     private orders: Order[] = [];
     private orderModal = false;
     async mounted() {
-      await StatusService.init();
-      await ProductService.init();
+      // init Products
+      await ProductModule.initProduct();
+      await StatusModule.initProduct();
+      // init Service
       this.orders = await OrderService.getAllOrders();
     }
+    // Toggle Modal
+    toggleOrderModal() {
+      this.orderModal = !this.orderModal;
+    }
+    // Create Order
     createProduct(value: Order) {
       OrderService.createOrder(value).then((res) => {
         this.toggleOrderModal();
         this.orders.push(res);
       });
     }
-    toggleOrderModal() {
-      this.orderModal = !this.orderModal;
-    }
-    handleStatusId(id: number) {
-      return StatusService.getStatusById(id);
-    }
-    handleProductImg(id: number) {
-      return ProductService.getProductById(id).photoUrl;
-    }
-    handleProductTitle(id: number) {
-      return ProductService.getProductById(id).name;
-    }
-    handleProductPrice(id: number) {
-      return ProductService.getProductById(id).price;
-    }
+    // Remove Order
     async removeOrderById(id: number) {
       await OrderService.removeOrderById(id);
       this.orders = this.orders.filter((item) => {
         return item.id !== id;
       });
+    }
+    // Find status by ID
+    handleStatus(id: number) {
+      return StatusModule.getStatusById(id);
+    }
+    // Find Product by ID
+    handleProduct(id: number) {
+      return ProductModule.getProductById(id);
     }
   }
 </script>
