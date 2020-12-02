@@ -17,5 +17,8 @@ class Api {
   async createOrder(value: Order): Promise<Order> {
     return (await axios.post("orders/add", value)).data;
   }
+  async updateOrder(value: Order): Promise<Order> {
+    return (await axios.post("orders/update", value)).data;
+  }
 }
 export default new Api();

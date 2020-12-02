@@ -8,14 +8,20 @@ import Api from "@/api/";
 @Module({ namespaced: true, name: "Statuses", store, dynamic: true })
 class Statuses extends VuexModule {
   public statusMap = new Map();
+  public statuses: Status[] = [];
 
   @Mutation
   private SET_STATUS_MAP(status: Status) {
     this.statusMap.set(status.id, status.name);
   }
+  @Mutation
+  private SET_STATUSES(statuses: Status[]) {
+    this.statuses = statuses;
+  }
   @Action
   async initProduct() {
     const ArrayStatus = await Api.getAllStatuses();
+    this.SET_STATUSES(ArrayStatus);
     for (const status of ArrayStatus) {
       this.SET_STATUS_MAP(status);
     }

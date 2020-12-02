@@ -12,5 +12,8 @@ class OrderService {
   createOrder(value: Order): Promise<Order> {
     return Api.createOrder(value);
   }
+  updateOrder(value: Order): Promise<Order> {
+    return Api.updateOrder(value);
+  }
 }
 export default new OrderService();

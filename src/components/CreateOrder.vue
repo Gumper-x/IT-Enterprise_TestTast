@@ -17,18 +17,15 @@
 
 <script lang="ts">
   import { Component, Emit, Vue } from "vue-property-decorator";
-  // Api
-  import Api from "@/api/index";
+  // Vuex
+  import ProductModule from "@/store/modules/product";
   // Dto
   import { Product } from "@/dto/api";
   @Component
   export default class OrderCard extends Vue {
     private productSelected = 1;
     private productCount = 1;
-    private products: Product[] = [];
-    async mounted() {
-      this.products = await Api.getAllProducts();
-    }
+    private products: Product[] = ProductModule.products;
     @Emit("submit")
     addProduct() {
       return {

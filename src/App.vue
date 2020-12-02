@@ -4,12 +4,11 @@
     <div class="grid">
       <OrderCard
         v-for="order in orders"
-        :img="handleProduct(order.productId).photoUrl"
-        :title="handleProduct(order.productId).name"
-        :price="handleProduct(order.productId).price"
+        :productId="order.productId"
         :count="order.count"
-        :status="handleStatus(order.statusId)"
+        :statusId="order.statusId"
         :key="order.id"
+        @changes="handleChangeOrder($event, order.id)"
         @remove="removeOrderById(order.id)"
       />
     </div>
@@ -69,13 +68,15 @@
         return item.id !== id;
       });
     }
-    // Find status by ID
-    handleStatus(id: number) {
-      return StatusModule.getStatusById(id);
-    }
-    // Find Product by ID
-    handleProduct(id: number) {
-      return ProductModule.getProductById(id);
+    handleChangeOrder(value: Order, orderId: number) {
+      const dataOrder = {
+        ...value,
+        id: orderId,
+      };
+      OrderService.updateOrder(dataOrder).then((res) => {
+        const foundIndex = this.orders.findIndex((item) => item.id == res.id);
+        this.$set(this.orders, foundIndex, res);
+      });
     }
   }
 </script>
