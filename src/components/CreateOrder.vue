@@ -5,7 +5,7 @@
     </el-select>
 
     <div class="create-order__count">
-      Количевство:
+      Количество:
       <span><el-input-number v-model="productCount" type="number" :min="1" /></span>
     </div>
 
